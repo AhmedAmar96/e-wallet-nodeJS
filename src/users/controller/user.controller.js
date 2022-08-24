@@ -12,10 +12,17 @@ const isOwner = require("../../../common/services/isOwner");
 const getUsersHandelr = async (req, res) => {
     const { searchKey, page, size } = req.query;
     const { skip, limit } = PaginationService(page, size);
+    const models = {
+        model : User,
+        childModel : ConversionOrders
+    }
+    const popul = {
+        createdPath: "createdBy",
+    }
     try {
-        const data = await findService(User, skip, limit, searchKey, [
+        const data = await findService(models, skip, limit, searchKey, [
             "username"
-        ], ["createdBy", "salesIds"])
+        ], popul)
         res.json({ message: "success", data });
     } catch (error) {
         res

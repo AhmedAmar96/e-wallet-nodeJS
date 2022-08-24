@@ -12,8 +12,9 @@ const ConversionOrdersSchema = new Schema(
                 message: (props) => `${props.value} invalid number >`
             }
         },
-        genreOfOp: {
+        genreOfOperation: {
             type: String,
+            required: [true, 'Genre of operation is requird'],
             enum: ["send", "receive"],
         },
         theAmount: {

@@ -36,13 +36,13 @@ exports.getWalletHandelr = async (req, res) => {
 //Add Wallet
 exports.addWalletsHandelr = async (req, res) => {
     try {
-        const { walletName, walletNum, walletBalance, transmission_limit, receipt_limit, createdBy, updatedBy } = req.body;
+        const { walletName, walletNum, walletBalance, send_limit, received_limit, createdBy, updatedBy } = req.body;
         const newWallets = new Wallets({
             walletName,
             walletNum,
             walletBalance,
-            transmission_limit,
-            receipt_limit,
+            send_limit,
+            received_limit,
             createdBy,
             updatedBy
         });
@@ -75,8 +75,8 @@ exports.deleteWalletsHandelr = async (req, res) => {
 exports.updateWalletsHandelr = async (req, res) => {
     try {
         const { _id } = req.params;
-        const { walletName, walletNum, walletBalance, transmission_limit, receipt_limit, updatedBy } = req.body;
-        const data = await Wallets.updateOne({ _id }, { walletName, walletNum, walletBalance, transmission_limit, receipt_limit, updatedBy });
+        const { walletName, walletNum, walletBalance, send_limit, received_limit, updatedBy } = req.body;
+        const data = await Wallets.updateOne({ _id }, { walletName, walletNum, walletBalance, send_limit, received_limit, updatedBy });
         res.json({ message: "update wallet success", data });
     } catch (error) {
         res

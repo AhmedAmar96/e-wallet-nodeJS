@@ -20,11 +20,11 @@ const walletsSchema = new Schema(
             type: Number,
             required: [true, 'Wallet balance is requird'],
         },
-        transmission_limit: {
+        send_limit: {
             type: Number,
             required: [true, 'Transmission limit price is requird'],
         },
-        receipt_limit: {
+        received_limit: {
             type: Number,
             required: [true, 'Receipt limit price is requird'],
         },

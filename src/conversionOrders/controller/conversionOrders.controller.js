@@ -12,7 +12,7 @@ exports.getConversionHandelr = async (req, res) => {
     const popul = {
         createdPath: "createdBy",
         updatedPath: "updatedBy",
-        userSelect: "username",
+        userSelect: "username", 
         modelPath: "walletsId",
         modelSelect: "walletNum"
     }
@@ -31,11 +31,20 @@ exports.getConversionHandelr = async (req, res) => {
 //Add conversion
 exports.addConversionHandelr = async (req, res) => {
     try {
-        const { receiverNumber, genreOfOp, theAmount, walletsId, createdBy, updatedBy } = req.body;
+        const { receiverNumber, genreOfOperation, theAmount, walletsId, createdBy, updatedBy } = req.body;
         const findWallet = await Wallets.findOne({ _id: walletsId });
         if (findWallet) {
-            const newConversion = new ConversionOrders({ receiverNumber, genreOfOp, theAmount, walletsId, createdBy, updatedBy });
+            const newConversion = new ConversionOrders({ receiverNumber, genreOfOperation, theAmount, walletsId, createdBy, updatedBy });
             const data = await newConversion.save();
+            const walletBlnce = findWallet.walletBalance - theAmount;
+            let walletsending = findWallet.send_limit;
+            let walletreceived = findWallet.received_limit;
+            if (genreOfOperation == 'send') {
+                walletsending = findWallet.send_limit - theAmount;
+            } else if (genreOfOperation == 'receive') {
+                walletreceived = findWallet.received_limit - theAmount;
+            }
+            await Wallets.updateOne({ _id: findWallet._id }, { walletBalance: walletBlnce, send_limit: walletsending, received_limit: walletreceived });
             res
                 .status(StatusCodes.CREATED)
                 .json({ message: "add success", data });
